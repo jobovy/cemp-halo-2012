@@ -23,9 +23,10 @@ IF ~keyword_set(weight) THEN weight= dblarr(ndata)+1.
 xvec= dblarr(ndata)
 cdf= dblarr(ndata)
 IF keyword_set(invert) THEN sortindx= REVERSE(SORT(data)) ELSE sortindx= SORT(data)
-FOR ii=0L, ndata-1 DO BEGIN
+cdf[0]= weight[sortindx[0]]
+FOR ii=1L, ndata-1 DO BEGIN
     xvec[ii]= data[sortindx[ii]]
-    cdf[ii]= total(weight[sortindx[0:ii]])
+    cdf[ii]= cdf[ii-1]+weight[sortindx[ii]]
 ENDFOR
 cdf= cdf/cdf[ndata-1]
 END
