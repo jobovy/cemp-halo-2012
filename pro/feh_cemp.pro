@@ -62,9 +62,9 @@ fehOuter= total(exp(logpost[1,*])*feh[indx])/total(exp(logpost[1,*]))
 print, fehOuter, cfeOuter
 djs_oplot, [fehOuter], [cfeOuter], psym=5, color='red'
 xs= feh[indx]
-predictedCfe= exp(logpost[1,*])*(coeffs[0]+coeffs[1]*xs+coeffs[2]*xs^2.)
-predictedCfe/= exp(logpost[1,*])
-djs_oplot, [fehOuter], [cfeOuter], psym=1, color='red', symsize=2
+predictedCfe= total(exp(logpost[1,*])*(coeffs[0]+coeffs[1]*xs+coeffs[2]*xs^2.))
+predictedCfe/= total(exp(logpost[1,*]))
+djs_oplot, [fehOuter], [predictedCfe], psym=1, color='red', symsize=2
 
 
 cfeindx= where(cfe[indx] GT 0.9)
@@ -73,9 +73,10 @@ fehOuter= total(exp(logpost[0,*])*feh[indx])/total(exp(logpost[0,*]))
 
 print, fehOuter, cfeOuter
 djs_oplot, [fehOuter], [cfeOuter], psym=5, color='green'
-predictedCfe= exp(logpost[0,*])*(coeffs[0]+coeffs[1]*xs+coeffs[2]*xs^2.)
-predictedCfe/= exp(logpost[0,*])
-djs_oplot, [fehOuter], [cfeOuter], psym=1, color='green', symsize=2
+predictedCfe= total(exp(logpost[0,*])*(coeffs[0]+coeffs[1]*xs+coeffs[2]*xs^2.))
+predictedCfe/= total(exp(logpost[0,*]))
+print, fehOuter, predictedCfe
+djs_oplot, [fehOuter], [predictedCfe], psym=1, color='green', symsize=2
 
 
 indx= where(feh LT -1.5 and feh GT -2.)
@@ -102,9 +103,9 @@ fehOuter= total(exp(logpost[1,*])*feh[indx])/total(exp(logpost[1,*]))
 
 print, fehOuter, cfeOuter
 djs_oplot, [fehOuter], [cfeOuter], psym=5, color='red'
-predictedCfe= exp(logpost[1,*])*(coeffs[0]+coeffs[1]*xs+coeffs[2]*xs^2.)
-predictedCfe/= exp(logpost[1,*])
-djs_oplot, [fehOuter], [cfeOuter], psym=1, color='red', symsize=2
+predictedCfe= total(exp(logpost[1,*])*(coeffs[0]+coeffs[1]*xs+coeffs[2]*xs^2.))
+predictedCfe/= total(exp(logpost[1,*]))
+djs_oplot, [fehOuter], [predictedCfe], psym=1, color='red', symsize=2
 
 cfeindx= where(cfe[indx] GT 0.9)
 cfeOuter= total(exp(logpost[0,cfeindx]))/total(exp(logpost[0,*]))
@@ -112,8 +113,8 @@ fehOuter= total(exp(logpost[0,*])*feh[indx])/total(exp(logpost[0,*]))
 
 print, fehOuter, cfeOuter
 djs_oplot, [fehOuter], [cfeOuter], psym=5, color='green'
-predictedCfe= exp(logpost[0,*])*(coeffs[0]+coeffs[1]*xs+coeffs[2]*xs^2.)
-predictedCfe/= exp(logpost[0,*])
-djs_oplot, [fehOuter], [cfeOuter], psym=1, color='green', symsize=2
+predictedCfe= total(exp(logpost[0,*])*(coeffs[0]+coeffs[1]*xs+coeffs[2]*xs^2.))
+predictedCfe/= total(exp(logpost[0,*]))
+djs_oplot, [fehOuter], [predictedCfe], psym=1, color='green', symsize=2
 
 END
