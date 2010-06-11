@@ -2,7 +2,10 @@
 ;   NAME:
 ;      weighted_kstwo
 ;   PURPOSE:
-;      perform a weighted ks test
+;      perform a weighted KS test
+;   CALLING SEQUENCE:
+;      weighted_kstwo, data1, data2, weight1=weight1, weight2=weight2, $
+;      D, prob
 ;   INPUT:
 ;       data1 -  vector of data values, at least 4 data values must be
 ;               included for the K-S statistic to be meaningful

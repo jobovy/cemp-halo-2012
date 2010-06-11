@@ -13,7 +13,7 @@ datafilename= '../data/File_Test_Carbon.txt'
 readcol, datafilename, blah, feh, V, sV, cfe, format='A,D,D,D,D'
 
 ;indx= where(feh LT -1.5 and feh GT -2.)
-indx= where(feh LT 2. and feh GT -2.5)
+indx= where(feh LT -2. and feh GT -2.5)
 amp= [0.5,0.5]
 xmean= [0.,-100.]
 xcovar=[1000.,1000.]
@@ -26,9 +26,11 @@ projected_gauss_mixtures_c, 2, ydata, ycovar, amp, xmean, xcovar
 
 print, xmean, amp
 
+njack= 90
 exd_jackerr, 2, ydata, ycovar, amp, xmean, xcovar, amperr, xmeanerr, xcovarerr, $
-  /quiet
+  /quiet, njack=njack
 
+print, njack
 print, amp, amperr
 print, xmean, xmeanerr
 print, xcovar, xcovarerr
