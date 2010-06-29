@@ -88,118 +88,159 @@ Data Analysis, Stars: Abundances, Surveys}
 
 \subsection{The Extreme Deconvolution Technique}
 
-Generally speaking, inferring the distribution function of an observable given only a finite, noisy set of measurements of that distribution is a problem of significant interest in many areas of science, and in astronomy in particular. The observed distribution of a parameter is just the starting point, but what we really want to know is the distribution that we would have in case of very small uncertainty of the data and with all of the dimensions of the parameter measured, or, in other words, the closest representation of the underlying distribution. Usually, the data never have the two mentioned properties, and it is then challenging to find the underlying distribution without taking into account the uncertainty of the data (Bovy, Hogg \& Roweis, 2009b; hereafter BHR09b). The data set can have large errors, can be heterogeneous, meaning that each data point is a sample of a different distribution, and incomplete. The Extreme Deconvolution technique confront all these issues and provides an accurate description of underlying distribution by taking into account the observational errors (convolution of the model distribution with the data uncertainties), and missing dimensions of a \emph{d}-dimensional quantity.
-BHR09b have generalized the well known estimation method in statistic, the maximum likelihood, to the case of noisy, heterogeneous, and incomplete data. By noisy data, we mean measures with large arbitrary uncertainty, including missing data.
+Generally speaking, inferring the distribution function of an
+observable given only a finite, noisy set of measurements of that
+distribution is a problem of significant interest in many areas of
+science, and in astronomy in particular. The observed distribution of
+a parameter is just the starting point, but what we really want to
+know is the distribution that we would have in case of very small
+uncertainty of the data and with all of the dimensions of the
+parameter measured, or, in other words, the closest representation of
+the underlying distribution. Usually, the data never have the two
+mentioned properties, and it is then challenging to find the
+underlying distribution without taking into account the uncertainty of
+the data (Bovy, Hogg \& Roweis, 2009b; hereafter BHR09b). The Extreme
+Deconvolution technique of BHR09b confronts all of these issues and
+provides an accurate description of the underlying distribution of a
+\emph{d}-dimensional quantity by taking into account the potentially
+large and heterogeneous observational uncertainties and missing
+dimensions.
 
 
-The likelihood of the model for each data point is given by the model convolved with the uncertainty distribution of that data point, and the objective function is obtained by simply multiplying the individual likelihood together for the various data points. The optimization of this objective function provides the maximum likelihood estimate of the distribution, or its parameters. The general description of the ExD technique is reported in Bovy, Hogg \& Roweis (2009) and the code is available at \texttt{http://code.google.com/p/extreme-deconvolution/}. The goal of the ExD is to fit a model for the distribution of a d-dimensional quantity {\bf v} using a set of N observational data points {\bf w$_{i}$}, which are assumed to be noisy projections of the true values {\bf v$_{i}$}:
-
+BHR09b have generalized the well known mixtures-of-Gaussians
+density-estimation method to the case of noisy, heterogeneous, and
+incomplete data. In this method, the underlying distribution of a
+quantity {\bf v} is modeled as a sum of $K$ Gaussian distributions
 \begin{eqnarray}
-{\bf w_{i} = R_{i}v_{i}} + noise
+p(\textbf{v}) = \sum_{j=1}^K \alpha_{j}N(\textbf{v|m$_{j}$},\textbf{V$_{j}$})\,,
 \end{eqnarray}
-
-where the noise is drawn from a normal distribution with zero mean and known covariance matrix {\bf S$_{i}$} and {\bf R$_{i}$} is the projection matrix. When missing data occurs, the projection matrix is rank-deficient.
-
-The distribution function (underlying distribution) of the true values, is modeled as a mixture of \emph{K} Gaussians:
-
-
+where the function N(\textbf{v|m$_{j}$},\textbf{V$_{j}$}) is the
+\emph{d}-dimensional Gaussian distribution with mean \textbf{m} and
+variance tensor \textbf{V} and $\alpha_{j}$ are the amplitudes,
+normalized to sum to unity (all of these parameters are grouped
+together as $\theta$ in what follows). The data {\bf w$_i$} are
+assumed to be noisy samples from this distribution
 \begin{eqnarray}
-p(\textbf{v}) = \sum_{j=1}^K \alpha_{j}N(\textbf{v|m$_{j}$},\textbf{V$_{j}$}),
+{\bf w_{i} = v_{i}} + \mathrm{noise}\,,
 \end{eqnarray}
+where the noise is drawn from a normal distribution with zero mean and
+known covariance matrix {\bf S$_{i}$}. Here and in what follows, we
+ignore the projection matrices {\bf R$_i$} of BHR09b, since the data we
+will apply this technique to are complete.
 
-where the function N(\textbf{v|m$_{j}$},\textbf{V$_{j}$}) is the \emph{d}-dimensional Gaussian distribution with mean \textbf{m} and variance tensor \textbf{V} and $\alpha_{j}$ are the amplitudes, normalized to unit.
-Note that the number of Gaussians, \emph{K}, is a free parameter.
-
-The probability of the observed data \textbf{w$_{i}$} given the parameters $\theta$ is given by a simple convolution of the model with the error distribution:
-
+The likelihood of the model for each data point is given by the model
+convolved with the uncertainty distribution of that data point. Since
+a Gaussian distribution convolved with another Gaussian distribution
+is again a Gaussian, the likelihood for each data point is a sum of
+Gaussian distributions
 \begin{eqnarray}
-p(\textbf{V$_{j}$}|\theta) \equiv p(\textbf{w$_{i}$}|\textbf{S$_{i}$},\textbf{R$_{i}$},\theta)=\sum_{j}\int_{v}dvp(\textbf{w$_{i}$}\textbf{v},j|\theta)
+p(\textbf{w$_{i}$}|\theta) = \sum_{j=1}^K \alpha_{j}N(\textbf{w$_{i}$}|\textbf{m$_{j}$},\textbf{T$_{ij}$})\,
 \end{eqnarray}
-
-This probability works out to be a mixture of Gaussians:
-
-\begin{eqnarray}
-p(\textbf{V$_{j}$}|\theta) = \sum_{j=1}^K \alpha_{j}N(\textbf{w$_{i}$|R$_{i}$m$_{j}$},\textbf{T$_{ij}$}),
-\end{eqnarray}
-
 where
-
 \begin{eqnarray}
-\textbf{T$_{ij}$} = \textbf{R$_{i}$}\textbf{V$_{j}$}\textbf{R$_{i}$$^{T}$} + \textbf{S$_{i}$}
+\textbf{T$_{ij}$} = \textbf{V$_{j}$} + \textbf{S$_{i}$}\,.
+\end{eqnarray}
+The objective function is the total likelihood, obtained by simply
+multiplying the individual likelihoods together for the various data
+points
+\begin{eqnarray}
+\ln \mathcal{L} = \sum_{i}\ln p(\textbf{w$_{i}$}|\theta) = \sum_{i}\ln\sum_{j=1}^K \alpha_{j}N(\textbf{w$_{i}$}|\textbf{m$_{j}$},\textbf{T$_{ij}$}).
 \end{eqnarray}
 
-because the model is a mixture of Gaussians and the uncertainties are Gaussians as well.
+The optimization of this objective function provides the maximum
+likelihood estimate of the distribution, or its parameters. BHR09b
+develop a fast and robust algorithm to optimize the likelihood that is
+an adaptation of the expectation-maximization algorithm\footnote{Code
+implementing this algorithm is available at
+\url{http://code.google.com/p/extreme-deconvolution/}\,.} (Dempster et
+al. 1977)
 
-For a given value of \emph{K}, the free parameters, $\theta$, of the density distribution will be chosen such as to maximize the logarithm of the likelihood of the model given the data:
-
+The ExD technique provides the best-fit values of the amplitude, mean
+and standard deviation of each Gaussian component, as well as the so
+called {\it posterior probability} that the observed data point
+\textbf{w$_{i}$} is drawn from the component \emph{j}. This posterior
+probability is given by
 \begin{eqnarray}
-ln f = \sum_{i}ln p(\textbf{v$_{j}$}|\theta) = \sum_{i}ln\sum_{j=1}^K \alpha_{j}N(\textbf{w$_{i}$|R$_{i}$m$_{j}$},\textbf{T$_{ij}$})).
+p_{ij} = \frac{\alpha_{j}N(\textbf{w$_{i}$}|\textbf{m$_{j}$},\textbf{T$_{ij}$})}{\sum_{k}\alpha_{k}N(\textbf{w$_{i}$}|\textbf{m$_{k}$},\textbf{T$_{ik}$})}\,,
 \end{eqnarray}
-
-The optimization of this function provides, for each \emph{K}, the best fit of the parameters.
-The employed optimization technique is know as expectation-maximization (EM; Dempster et al. 1977), and a detailed description can be found in Bovy et al. (2009). The technique provides the best values of the amplitude, mean and standard deviation of each Gaussian component, as well as the so called {\it posterior probability} that the observed data \textbf{w$_{i}$} is drawn from the component \emph{j}.
-
-The {\it posterior probability} is defined as:
-
-\begin{eqnarray}
-p_{ij} = \frac{\alpha_{j}N(\textbf{w$_{i}$|R$_{i}$m$_{j}$},\textbf{T$_{ij}$})}{\sum_{k}\alpha_{k}N(\textbf{w$_{i}$|R$_{i}$m$_{k}$},\textbf{T$_{ik}$})}
-\end{eqnarray}
-
-or, by substituting equation (5)
-
-\begin{eqnarray}
-p_{ij} = \frac{\alpha_{j}N(\textbf{w$_{i}$|R$_{i}$m$_{j}$},\textbf{R$_{i}$}\textbf{V$_{j}$}\textbf{R$_{i}$$^{T}$} + \textbf{S$_{i}$})}{\sum_{k}\alpha_{k}N(\textbf{w$_{i}$|R$_{i}$m$_{k}$},\textbf{R$_{i}$}\textbf{V$_{j}$}\textbf{R$_{i}$$^{T}$} + \textbf{S$_{i}$})}
-\end{eqnarray}
-
-where $\alpha_{j}$, \textbf{m$_{j}$} and \textbf{V$_{j}$}, are the amplitude, mean and variance of the \emph{j}th Gaussian component (see Bovy, Hogg \& Roweis, 2009 for the derivation of this formula).
-The posterior probability is a powerful statistical tool to perform probabilistic assignment of a star to a Gaussian component in the model distribution. In Galactic studies, the Gaussian component could represents a primary structure, disks or halos, a moving group, or an over-density.\\
+(see BHR09b for the derivation of this formula). The posterior
+probability is a powerful statistical tool to perform probabilistic
+assignments of stars to a Gaussian component in the model
+distribution. In Galactic studies, the Gaussian component could
+represents a primary structure, a disk or halo, a moving group, or an
+overdensity.\\
 %This quantity will be explored in section [].\\
 
-In many aspects, the ExD technique described above is similar to the maximum likelihood technique adopted in Carollo et al. 2010, but is more general, because take into account the uncertainties of the measures which are convolved with the model, and provides the membership probabilities. The application of the ExD to the SDSS DR8 data is described in the next section.
+In many aspects, the ExD technique described above is similar to the
+maximum likelihood technique adopted in Carollo et al. 2010, but is
+more general, because it takes into account the uncertainties of the
+measurements and provides the membership probabilities. The
+application of the ExD to the SDSS DR8 data is described in the next
+section.
 
 \subsection{Application to the SDSS-SEGUE DR8 Calibration Stars}
 
-The basic parameters for the Extreme Deconvolution are the galactocentric rotational velocity, V$_{\phi}$ in combination with the vertical distance Z$_{max}$ and the metallicity, [Fe/H]. We want to determine the underlying distribution of the rotational velocity. Section 2 describes how these parameters have been derived, while here, the quantities adopted in the ExD technique are specified, and translated in the ExD formalism for a better description of the technique.\\
-The observable are ($\alpha$, $\delta$, d, $\mu_{\alpha}$, $\mu_{\delta}$, $v_{r}$), where $\alpha$ and $\delta$ represent the star position, right ascension and declination, and d is the distance of a star from the Sun. The observable for the star motion are the proper motions $\mu_{\alpha}$ and $\mu_{\delta}$, and the radial velocity $v_{r}$. The vector of the observable is a function of all these parameters, \textbf{w} = \emph{f}($\alpha$, $\delta$, d, $\mu_{\alpha}$, $\mu_{\delta}$, $v_{r}$), and each of them has an uncertainty described by the vector \textbf{c$_{i}$}, which is an entry of the ExD algorithm, together with the vector of observable. The projection matrix \textbf{R} is defined as \textbf{R}$^{-1}$ = \textbf{T}\textbf{A}, where \textbf{T} is the transformation matrix from the equatorial coordinates to Galactic coordinates and \textbf{A} is the coordinate matrix (Johnson \& Soderblom, 1987). The single star uncertainty covariance \textbf{C} is related to the measurement uncertainty covariances \textbf{S$_{i}$} by:
+We use the ExD technique to determine the underlying distribution of
+the rotational velocity of halo stars and to determine posterior
+membership probabilities for each star. In practice, the entries for
+the ExD algorithm are the galactocentric rotational velocity and its
+uncertainty for each star, V$_{\phi,i}$ and
+$\varepsilon_{V_{\phi},i}$, respectively. These two parameters,
+together with all the other kinematic and orbital quantities, are
+derived by using the same procedures employed in C07 and C10, and
+mentioned in section 2. 
 
-\begin{eqnarray}
-\textbf{S$_{i}$} = \textbf{Q$_{i}$}\textbf{C$_{i}$}\textbf{Q$_{i}^{T}$}
-\end{eqnarray}
+It has been noticed in section 2 that the full sample of SDSS DR8
+calibration stars contains a significantly higher number of carbon
+enhanced metal poor stars with respect the local sample. For the
+purpose of this paper, our orientation is to use a sub-sample in which
+the constraint on the distance from the Sun, d, and on the projected
+Galactic distance, R, are relaxed. As a consequence, the data set
+becomes more noisy with respect the local sample, because the
+uncertainties on the transverse velocities increase with the distance
+d. In the ExD technique terminology, the analysis of the extended
+sample falls in the case in which all the observable are known, but
+some of the derived parameters have large uncertainties. Moreover, the
+lower metallicity bins ([Fe/H] $<$ -2.5), must have a sufficient
+number of stars to perform the deconvolution, even at the most extreme
+metallicity regimes. This request is not satisfied by the sample
+mentioned above (SDSS DR8 calibration stars and relaxed distances). It
+is necessary to employ the SDSS DR8 calibration stars plus the full
+sample of SDSS DR8 at low metallicity, [Fe/H] $<$ -2.0 (section
+3.3.2).
 
-
-where \textbf{Q$_{i}$} = d\textbf{w$_{i}$}/d\textbf{c$_{i}$}, is the derivative of the observations with respect the uncertainties[JO, THIS IS NOT SO CLEAR. IS IT STILL OK FOR THE SDSS DR8?].
-In practice, the entries for the ExD algorithm are the galactocentric rotational velocity and its error for each star, V$_{\phi,i}$ and $\varepsilon_{V_{\phi},i}$, respectively. These two parameters, together with all the other kinematic and orbital quantities, are derived by using the same procedures employed in C07 and C10, and mentioned in section 2.
-[Jo, shell we address here how the ExD algorithm behave when you give Vphi instead of the observable?]\\
-It is worth noting that, in case of the SDSS DR8 calibration stars sample, the vector of observable \textbf{w} is complete, because it contains positions, proper motions, distances (photometric), and radial velocities for each star. In other words, there are not missing data. In other surveys or catalogues, one or more observable are missing, like for example, the radial velocity. A detailed analysis of one of these cases can be found in Bovy, Hoog \& Rowess (2009a), where the authors apply the ExD technique to the Hipparcos data, in which the radial velocity is known just for a sub-sample of stars. \\It has been noticed in section 2 that the full sample of SDSS DR8 calibration stars contains a significantly higher number of carbon enhanced metal poor stars with respect the local sample. For the purpose of this paper, our orientation is to use a sub-sample in which the constraint on the distance from the Sun, d, and on the projected Galactic distance, R, are relaxed. As consequence, the data set become more noisy with respect the local sample, because the errors on the transverse velocities increase with the distance d. In the extreme deconvolution technique terminology, the analysis of the extended sample falls in the case in which all the observable are known, but some of the derived parameters have high uncertainties. Moreover, the lower metallicity bins ([Fe/H] $<$ -2.5), must have a sufficient number of stars to perform the deconvolution, even at the most extreme metallicity regimes. This request is not satisfied by the sample mentioned above (SDSS DR8 calibration stars and relaxed distances). It is necessary to employ the SDSS DR8 calibration stars plus the full sample of SDSS DR8 at low metallicity, [Fe/H] $<$ -2.0 (section 3.3.2).\\
-
-The halo is a two-components structure, comprising the inner and the outer halo, as discussed in C07 and C10.
+We model the halo as a two-component structure, comprising the inner
+and the outer halo, as discussed in C07 and C10.
 %The thick disk system is not included in this analysis, and will be considered in a %future paper.
-Thus, the general expression for the likelihood function takes the form:
-
-
+Thus, the general expression for the likelihood takes the form:
 \begin{eqnarray}
-\ln f = \displaystyle\sum_{i} \ln [\alpha_{in}\cdot N^{i}_{in} + \alpha_{out}\cdot N^{i}_{out}]
+\ln \mathcal{L} = \displaystyle\sum_{i} \ln [\alpha_{in}\cdot N^{i}_{in} + \alpha_{out}\cdot N^{i}_{out}]\,,
+\end{eqnarray}
+where $\alpha_{in}$ and $\alpha_{out}$ are the amplitude of the
+inner and outer halo, respectively. The velocity distributions are
+assumed to be Gaussian and thus
+\begin{eqnarray}
+N^i_{in/out} = N(V_{\phi,i} | V_{\phi,in/out},\sigma^2_{\phi,in/out}+\varepsilon^2_{V_{\phi},i})\,,
 \end{eqnarray}
 
-where $\alpha_{in}$ and $\alpha_{out}$ are the amplitude of the velocity distributions \emph{N$_{in}$} and \emph{N$_{out}$}, for the inner and outer halo, respectively. The velocity distributions are assumed to be Gaussian.
-
-The membership probability takes the form:
+The membership probabilities then take the form:
 
 \begin{eqnarray}
 p_{i, in} = \frac{\alpha_{in}N_{in}^{i}}{\alpha_{in}N_{in}^{i} + \alpha_{out}N_{out}^{i}}
 \end{eqnarray}
 
-for the \emph{i}th inner halo star, and
+and
 
 \begin{eqnarray}
 p_{i, out} = \frac{\alpha_{out}N_{out}^{i}}{\alpha_{in}N_{in}^{i} + \alpha_{out}N_{out}^{i}}
 \end{eqnarray}
 
-for the \emph{i}th outer halo star.\\
+for the \emph{i}th star.\\
 
-[\textbf{Write more?}]\\
-
-The ExD technique is first applied to the SDSS DR8 local sample, then to the extended sample. The first application is intended to compare the values of the rotational velocity and its dispersion with those obtained by using the SDSS DR7.
+The ExD technique is first applied to the SDSS DR8 local sample, then
+to the extended sample. The first application is intended to compare
+the values of the rotational velocity and its dispersion with those
+obtained by using the SDSS DR7.
 
 
 %Figure 6 shows the results of the ExD analysis for the SDSS DR8 calibration stars sample, selected in %the same range of metallicity,[Fe/H] $<$ -2.0, and at Z$_{max}$ $>$ 5 kpc (\textbf{comparison and %comments}).
@@ -209,7 +250,10 @@ The ExD technique is first applied to the SDSS DR8 local sample, then to the ext
 
 
 
-\acknowledgments
+\acknowledgments 
+[{\bf Daniela: insert below somewhere}]: J.B. was partially supported by
+NASA (grant NNX08AJ48G) and the NSF (grant AST-0908357).
+
 D.C. acknowledges funding from RSAA ANU to pursue her research. She is also
 particularly grateful to W. E. Harris for useful discussions on the
 mixture-modeling analysis and the R-Mix package, during his visit to Mount Stromlo
