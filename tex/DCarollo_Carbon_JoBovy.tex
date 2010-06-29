@@ -1,0 +1,369 @@
+%%
+%% Beginning of file 'sample.tex'
+%%
+%% Modified 2005 December 5
+%%
+%% This is a sample manuscript marked up using the
+%% AASTeX v5.x LaTeX 2e macros.
+
+%% The first piece of markup in an AASTeX v5.x document
+%% is the \documentclass command. LaTeX will ignore
+%% any data that comes before this command.
+
+%% The command below calls the preprint style
+%% which will produce a one-column, single-spaced document.
+%% Examples of commands for other substyles follow. Use
+%% whichever is most appropriate for your purposes.
+%%
+%\documentclass[12pt,preprint]{aastex}
+
+%% manuscript produces a one-column, double-spaced document:
+
+%%\documentclass[manuscript]{aastex}
+%\documentclass[preprint2,longabstract]{aastex}
+%%\usepackage[dvips]{color}
+%% preprint2 produces a double-column, single-spaced document:
+
+\documentclass[apj]{emulateapj}
+\usepackage[dvips]{color}
+\usepackage{apjfonts}
+
+%\documentclass[preprint2]{aastex}
+
+%% Sometimes a paper's abstract is too long to fit on the
+%% title page in preprint2 mode. When that is the case,
+%% use the longabstract style option.
+
+%\documentclass[preprint2,longabstract]{aastex}
+
+\newcommand{\vdag}{(v)^\dagger}
+\newcommand{\myemail}{carollo@mso.anu.edu.au}
+
+%% You can insert a short comment on the title page using the command below.
+
+\slugcomment{}
+
+%% If you wish, you may supply running head information, although
+%% this information may be modified by the editorial offices.
+%% The left head contains a list of authors,
+%% usually a maximum of three (otherwise use et al.).  The right
+%% head is a modified title of up to roughly 44 characters.
+%% Running heads will not print in the manuscript style.
+
+\shorttitle{CEMP stars contrast in the halo components of the Milky Way}
+\shortauthors{Carollo et al.}
+
+%% This is the end of the preamble.  Indicate the beginning of the
+%% paper itself with \begin{document}.
+
+\begin{document}
+
+%% LaTeX will automatically break titles if they run longer than
+%% one line. However, you may use \\ to force a line break if
+%% you desire.
+
+\title{Carbon Enhanced Metal Poor Stars in the Inner-and Outer Halo Components of the\\ Milky Way}
+
+
+\author{Daniela Carollo\altaffilmark{1}}
+\affil{Research School of Astronomy \& Astrophysics, Australian National
+University\\ \& Mount Stromlo Observatory, Cotter Road, Weston, ACT, 2611, Australia}
+\email{carollo@mso.anu.edu.au}
+
+\author{et al.}
+\affil{Department of Physics \& Astronomy and JINA: Joint Institute for Nuclear Astrophysics, Michigan
+State University,\\ E. Lansing, MI 48824, USA}
+\email{beers@pa.msu.edu}
+
+
+\altaffiltext{1} {INAF-Osservatorio Astronomico di Torino, Italy}
+
+\begin{abstract}
+
+\end{abstract}
+
+\keywords{Galaxy: Evolution, Galaxy: Formation, Galaxy:
+General, Galaxy: Halo, Galaxy: Disks, Galaxy: Kinematics, Galaxy: Structure, Methods:
+Data Analysis, Stars: Abundances, Surveys}
+
+\subsection{The Extreme Deconvolution Technique}
+
+Generally speaking, inferring the distribution function of an observable given only a finite, noisy set of measurements of that distribution is a problem of significant interest in many areas of science, and in astronomy in particular. The observed distribution of a parameter is just the starting point, but what we really want to know is the distribution that we would have in case of very small uncertainty of the data and with all of the dimensions of the parameter measured, or, in other words, the closest representation of the underlying distribution. Usually, the data never have the two mentioned properties, and it is then challenging to find the underlying distribution without taking into account the uncertainty of the data (Bovy, Hogg \& Roweis, 2009b; hereafter BHR09b). The data set can have large errors, can be heterogeneous, meaning that each data point is a sample of a different distribution, and incomplete. The Extreme Deconvolution technique confront all these issues and provides an accurate description of underlying distribution by taking into account the observational errors (convolution of the model distribution with the data uncertainties), and missing dimensions of a \emph{d}-dimensional quantity.
+BHR09b have generalized the well known estimation method in statistic, the maximum likelihood, to the case of noisy, heterogeneous, and incomplete data. By noisy data, we mean measures with large arbitrary uncertainty, including missing data.
+
+
+The likelihood of the model for each data point is given by the model convolved with the uncertainty distribution of that data point, and the objective function is obtained by simply multiplying the individual likelihood together for the various data points. The optimization of this objective function provides the maximum likelihood estimate of the distribution, or its parameters. The general description of the ExD technique is reported in Bovy, Hogg \& Roweis (2009) and the code is available at \texttt{http://code.google.com/p/extreme-deconvolution/}. The goal of the ExD is to fit a model for the distribution of a d-dimensional quantity {\bf v} using a set of N observational data points {\bf w$_{i}$}, which are assumed to be noisy projections of the true values {\bf v$_{i}$}:
+
+\begin{eqnarray}
+{\bf w_{i} = R_{i}v_{i}} + noise
+\end{eqnarray}
+
+where the noise is drawn from a normal distribution with zero mean and known covariance matrix {\bf S$_{i}$} and {\bf R$_{i}$} is the projection matrix. When missing data occurs, the projection matrix is rank-deficient.
+
+The distribution function (underlying distribution) of the true values, is modeled as a mixture of \emph{K} Gaussians:
+
+
+\begin{eqnarray}
+p(\textbf{v}) = \sum_{j=1}^K \alpha_{j}N(\textbf{v|m$_{j}$},\textbf{V$_{j}$}),
+\end{eqnarray}
+
+where the function N(\textbf{v|m$_{j}$},\textbf{V$_{j}$}) is the \emph{d}-dimensional Gaussian distribution with mean \textbf{m} and variance tensor \textbf{V} and $\alpha_{j}$ are the amplitudes, normalized to unit.
+Note that the number of Gaussians, \emph{K}, is a free parameter.
+
+The probability of the observed data \textbf{w$_{i}$} given the parameters $\theta$ is given by a simple convolution of the model with the error distribution:
+
+\begin{eqnarray}
+p(\textbf{V$_{j}$}|\theta) \equiv p(\textbf{w$_{i}$}|\textbf{S$_{i}$},\textbf{R$_{i}$},\theta)=\sum_{j}\int_{v}dvp(\textbf{w$_{i}$}\textbf{v},j|\theta)
+\end{eqnarray}
+
+This probability works out to be a mixture of Gaussians:
+
+\begin{eqnarray}
+p(\textbf{V$_{j}$}|\theta) = \sum_{j=1}^K \alpha_{j}N(\textbf{w$_{i}$|R$_{i}$m$_{j}$},\textbf{T$_{ij}$}),
+\end{eqnarray}
+
+where
+
+\begin{eqnarray}
+\textbf{T$_{ij}$} = \textbf{R$_{i}$}\textbf{V$_{j}$}\textbf{R$_{i}$$^{T}$} + \textbf{S$_{i}$}
+\end{eqnarray}
+
+because the model is a mixture of Gaussians and the uncertainties are Gaussians as well.
+
+For a given value of \emph{K}, the free parameters, $\theta$, of the density distribution will be chosen such as to maximize the logarithm of the likelihood of the model given the data:
+
+\begin{eqnarray}
+ln f = \sum_{i}ln p(\textbf{v$_{j}$}|\theta) = \sum_{i}ln\sum_{j=1}^K \alpha_{j}N(\textbf{w$_{i}$|R$_{i}$m$_{j}$},\textbf{T$_{ij}$})).
+\end{eqnarray}
+
+The optimization of this function provides, for each \emph{K}, the best fit of the parameters.
+The employed optimization technique is know as expectation-maximization (EM; Dempster et al. 1977), and a detailed description can be found in Bovy et al. (2009). The technique provides the best values of the amplitude, mean and standard deviation of each Gaussian component, as well as the so called {\it posterior probability} that the observed data \textbf{w$_{i}$} is drawn from the component \emph{j}.
+
+The {\it posterior probability} is defined as:
+
+\begin{eqnarray}
+p_{ij} = \frac{\alpha_{j}N(\textbf{w$_{i}$|R$_{i}$m$_{j}$},\textbf{T$_{ij}$})}{\sum_{k}\alpha_{k}N(\textbf{w$_{i}$|R$_{i}$m$_{k}$},\textbf{T$_{ik}$})}
+\end{eqnarray}
+
+or, by substituting equation (5)
+
+\begin{eqnarray}
+p_{ij} = \frac{\alpha_{j}N(\textbf{w$_{i}$|R$_{i}$m$_{j}$},\textbf{R$_{i}$}\textbf{V$_{j}$}\textbf{R$_{i}$$^{T}$} + \textbf{S$_{i}$})}{\sum_{k}\alpha_{k}N(\textbf{w$_{i}$|R$_{i}$m$_{k}$},\textbf{R$_{i}$}\textbf{V$_{j}$}\textbf{R$_{i}$$^{T}$} + \textbf{S$_{i}$})}
+\end{eqnarray}
+
+where $\alpha_{j}$, \textbf{m$_{j}$} and \textbf{V$_{j}$}, are the amplitude, mean and variance of the \emph{j}th Gaussian component (see Bovy, Hogg \& Roweis, 2009 for the derivation of this formula).
+The posterior probability is a powerful statistical tool to perform probabilistic assignment of a star to a Gaussian component in the model distribution. In Galactic studies, the Gaussian component could represents a primary structure, disks or halos, a moving group, or an over-density.\\
+%This quantity will be explored in section [].\\
+
+In many aspects, the ExD technique described above is similar to the maximum likelihood technique adopted in Carollo et al. 2010, but is more general, because take into account the uncertainties of the measures which are convolved with the model, and provides the membership probabilities. The application of the ExD to the SDSS DR8 data is described in the next section.
+
+\subsection{Application to the SDSS-SEGUE DR8 Calibration Stars}
+
+The basic parameters for the Extreme Deconvolution are the galactocentric rotational velocity, V$_{\phi}$ in combination with the vertical distance Z$_{max}$ and the metallicity, [Fe/H]. We want to determine the underlying distribution of the rotational velocity. Section 2 describes how these parameters have been derived, while here, the quantities adopted in the ExD technique are specified, and translated in the ExD formalism for a better description of the technique.\\
+The observable are ($\alpha$, $\delta$, d, $\mu_{\alpha}$, $\mu_{\delta}$, $v_{r}$), where $\alpha$ and $\delta$ represent the star position, right ascension and declination, and d is the distance of a star from the Sun. The observable for the star motion are the proper motions $\mu_{\alpha}$ and $\mu_{\delta}$, and the radial velocity $v_{r}$. The vector of the observable is a function of all these parameters, \textbf{w} = \emph{f}($\alpha$, $\delta$, d, $\mu_{\alpha}$, $\mu_{\delta}$, $v_{r}$), and each of them has an uncertainty described by the vector \textbf{c$_{i}$}, which is an entry of the ExD algorithm, together with the vector of observable. The projection matrix \textbf{R} is defined as \textbf{R}$^{-1}$ = \textbf{T}\textbf{A}, where \textbf{T} is the transformation matrix from the equatorial coordinates to Galactic coordinates and \textbf{A} is the coordinate matrix (Johnson \& Soderblom, 1987). The single star uncertainty covariance \textbf{C} is related to the measurement uncertainty covariances \textbf{S$_{i}$} by:
+
+\begin{eqnarray}
+\textbf{S$_{i}$} = \textbf{Q$_{i}$}\textbf{C$_{i}$}\textbf{Q$_{i}^{T}$}
+\end{eqnarray}
+
+
+where \textbf{Q$_{i}$} = d\textbf{w$_{i}$}/d\textbf{c$_{i}$}, is the derivative of the observations with respect the uncertainties[JO, THIS IS NOT SO CLEAR. IS IT STILL OK FOR THE SDSS DR8?].
+In practice, the entries for the ExD algorithm are the galactocentric rotational velocity and its error for each star, V$_{\phi,i}$ and $\varepsilon_{V_{\phi},i}$, respectively. These two parameters, together with all the other kinematic and orbital quantities, are derived by using the same procedures employed in C07 and C10, and mentioned in section 2.
+[Jo, shell we address here how the ExD algorithm behave when you give Vphi instead of the observable?]\\
+It is worth noting that, in case of the SDSS DR8 calibration stars sample, the vector of observable \textbf{w} is complete, because it contains positions, proper motions, distances (photometric), and radial velocities for each star. In other words, there are not missing data. In other surveys or catalogues, one or more observable are missing, like for example, the radial velocity. A detailed analysis of one of these cases can be found in Bovy, Hoog \& Rowess (2009a), where the authors apply the ExD technique to the Hipparcos data, in which the radial velocity is known just for a sub-sample of stars. \\It has been noticed in section 2 that the full sample of SDSS DR8 calibration stars contains a significantly higher number of carbon enhanced metal poor stars with respect the local sample. For the purpose of this paper, our orientation is to use a sub-sample in which the constraint on the distance from the Sun, d, and on the projected Galactic distance, R, are relaxed. As consequence, the data set become more noisy with respect the local sample, because the errors on the transverse velocities increase with the distance d. In the extreme deconvolution technique terminology, the analysis of the extended sample falls in the case in which all the observable are known, but some of the derived parameters have high uncertainties. Moreover, the lower metallicity bins ([Fe/H] $<$ -2.5), must have a sufficient number of stars to perform the deconvolution, even at the most extreme metallicity regimes. This request is not satisfied by the sample mentioned above (SDSS DR8 calibration stars and relaxed distances). It is necessary to employ the SDSS DR8 calibration stars plus the full sample of SDSS DR8 at low metallicity, [Fe/H] $<$ -2.0 (section 3.3.2).\\
+
+The halo is a two-components structure, comprising the inner and the outer halo, as discussed in C07 and C10.
+%The thick disk system is not included in this analysis, and will be considered in a %future paper.
+Thus, the general expression for the likelihood function takes the form:
+
+
+\begin{eqnarray}
+\ln f = \displaystyle\sum_{i} \ln [\alpha_{in}\cdot N^{i}_{in} + \alpha_{out}\cdot N^{i}_{out}]
+\end{eqnarray}
+
+where $\alpha_{in}$ and $\alpha_{out}$ are the amplitude of the velocity distributions \emph{N$_{in}$} and \emph{N$_{out}$}, for the inner and outer halo, respectively. The velocity distributions are assumed to be Gaussian.
+
+The membership probability takes the form:
+
+\begin{eqnarray}
+p_{i, in} = \frac{\alpha_{in}N_{in}^{i}}{\alpha_{in}N_{in}^{i} + \alpha_{out}N_{out}^{i}}
+\end{eqnarray}
+
+for the \emph{i}th inner halo star, and
+
+\begin{eqnarray}
+p_{i, out} = \frac{\alpha_{out}N_{out}^{i}}{\alpha_{in}N_{in}^{i} + \alpha_{out}N_{out}^{i}}
+\end{eqnarray}
+
+for the \emph{i}th outer halo star.\\
+
+[\textbf{Write more?}]\\
+
+The ExD technique is first applied to the SDSS DR8 local sample, then to the extended sample. The first application is intended to compare the values of the rotational velocity and its dispersion with those obtained by using the SDSS DR7.
+
+
+%Figure 6 shows the results of the ExD analysis for the SDSS DR8 calibration stars sample, selected in %the same range of metallicity,[Fe/H] $<$ -2.0, and at Z$_{max}$ $>$ 5 kpc (\textbf{comparison and %comments}).
+%The derived mean rotational velocity and its dispersion are, V$_{\phi}$ =
+
+%\textbf{Here describe the differences with respect the previous paper, including the selection %criteria related to the carbon abundance parameter.}\\
+
+
+
+\acknowledgments
+D.C. acknowledges funding from RSAA ANU to pursue her research. She is also
+particularly grateful to W. E. Harris for useful discussions on the
+mixture-modeling analysis and the R-Mix package, during his visit to Mount Stromlo
+Observatory. T.C.B. and Y.S.L. acknowledge partial funding of this work from
+grants PHY 02-16783 and PHY 08-22648: Physics Frontier Center/Joint Institute
+for Nuclear Astrophysics (JINA), awarded by the U.S. National Science
+Foundation. M.C. acknowledges support from a Grant-in-Aid for Scientific
+Research (20340039) of the Ministry of Education, Culture, Sports, Science and
+Technology in Japan. Studies at ANU of the most metal-poor populations of the
+Milky Way are supported by Australian Reseach Council grants DP0663562 and
+DP0984924. T.C.B. is grateful for the assistance and hospitality of the faculty,
+staff, and students at Mount Stromlo Observatory, during a recent research leave.
+
+%% To help institutions obtain information on the effectiveness of their
+%% telescopes, the AAS Journals has created a group of keywords for telescope
+%% facilities. A common set of keywords will make these types of searches
+%% significantly easier and more accurate. In addition, they will also be
+%% useful in linking papers together which utilize the same telescopes
+%% within the framework of the National Virtual Observatory.
+%% See the AASTeX Web site at http://www.journals.uchicago.edu/AAS/AASTeX
+%% for information on obtaining the facility keywords.
+
+%% After the acknowledgments section, use the following syntax and the
+%% \facility{} macro to list the keywords of facilities used in the research
+%% for the paper.  Each keyword will be checked against the master list during
+%% copy editing.  Individual instruments or configurations can be provided
+%% in parentheses, after the keyword, but they will not be verified.
+
+%% Appendix material should be preceded with a single \appendix command.
+%% There should be a \section command for each appendix. Mark appendix
+%% subsections with the same markup you use in the main body of the paper.
+
+%% Each Appendix (indicated with \section) will be lettered A, B, C, etc.
+%% The equation counter will reset when it encounters the \appendix
+%% command and will number appendix equations (A1), (A2), etc.
+
+{\it Facilities:} \facility{SDSS}.
+
+
+
+\begin{thebibliography}{}
+
+\end{thebibliography}
+
+
+
+
+
+%\begin{figure}
+%\figurenum{1}
+%\epsscale{0.7}
+%\plotone{MDF_CDF_Full_Local.eps}
+%\caption{Upper panel: Metallicity Distribution Function (MDF), {\it as observed}, for the full sample of
+%calibration stars (black histogram), and for the stars satisfying our criteria
+%for the local sample (red histogram).  Lower panel:  Carbon Distribution Function (CDF), {\it as observed}. %for the full sample of calibration stars (black histogram), and for the local sample (red histogram). Note %that the full sample contains
+%substantial numbers of main-sequence turnoff stars, subgiants, and giants,
+%while the local sample primarily comprises main-sequence turnoff stars and
+%dwarfs.}
+
+
+%\end{figure}
+%\clearpage
+
+
+
+%\begin{figure}
+%\figurenum{2}
+%\epsscale{0.7}
+%\plotone{figure2.eps}
+%\caption{Global behavior of the basic parameters, V$_{\phi}$, [Fe/H], [C/Fe]. for the full local sample. Top %panel: galactocentric rotational velocity as a function of the metallicity; middle panel: galactocentric %rotational velocity as a function of carbon-to-iron ratio, [C/Fe]; bottom panel: metallicity vs. %carbon-to-iron ration. In all panels, the grey dots represent all the stars in the full-local-sample, the %red dots denote the stars with [C/Fe] $>$ +0.5, while the black dots show the CEMP stars, [C/Fe] $>$ +1.0}
+
+
+%\end{figure}
+%\clearpage
+
+%\begin{figure}
+%\figurenum{3}
+%\epsscale{0.8}
+%\plotone{figure20.eps}
+%\caption{Observed metallicity distribution functions (MDFs) for the full sample
+%of SDSS-SEGUE DR7 calibration stars as a function of vertical distance from the
+%Galactic plane. The black histograms represent the MDFs obtained at different
+%cuts of $|$Z$|$, while the red arrows denote the locations of the metallicity
+%peaks of the MDF for the thick disk ($-0.6$), the MWTD ($\sim -1.3$), the inner
+%halo ($-1.6$), and the outer halo ($-2.2$), respectively.
+%}
+%\end{figure}
+%\clearpage
+
+
+%\begin{figure}
+%\figurenum{4}
+%\epsscale{0.8}
+%\plotone{CDF_full_Z.eps}
+%\caption{Observed carbon distribution functions (CDFs) for the full sample
+%of SDSS-SEGUE DR7 calibration stars as a function of vertical distance from the
+%Galactic plane. The black histograms represent the CDFs obtained at different
+%cuts of $|$Z$|$.
+%}
+
+%\end{figure}
+%\clearpage
+
+
+%\begin{figure}
+%\figurenum{5}
+%\epsscale{0.6}
+%\plotone{figure5b.eps}
+%\caption{Rotational properties of the local sample of SDSS-DR7 calibration stars at  metallicity %[Fe/H] $<$ -2.0 and Z$_{max}$ $>$ 5 kpc. Top panel: the histogram represents the observed
+%distribution of V$_{\phi}$, while the green (inner halo), and red (outer halo) curves show the %results of the Extreme Deconvolution analysis. Bottom panel: the observed velocity distribution %function (black), and the inner- and outer halo weighted velocity distribution function, denoted %by the green and the red histogram, respectively. Notice that in the bottom panel all the %distribution are normalized by taking into account the membership probabilities of each star.
+%\textbf{the PDF label has probably to be changed in the plot...}
+%}
+
+%\end{figure}
+%\clearpage
+
+
+%\begin{figure}
+%\figurenum{6}
+%\epsscale{0.6}
+%\plotone{figure5a.eps}
+%\caption{The same as Figure 5 but for the SDSS-DR8 calibration stars sample.
+%}
+
+%\end{figure}
+%\clearpage
+
+%\begin{figure}
+%\figurenum{6}
+%\epsscale{0.8}
+%\plotone{figure8.eps}
+%\caption{Global trend of the CEMP fraction as a function of the metallicity, and for the metal %poor sub-sample of the extended dataset. Each bin of metallicity has an extension of %$\Delta$[Fe/H] = 0.2 dex, with the exception of the lowest metallicity bin, for which [Fe/H] $<$ %-2.6. The error bars are evaluated with the {\it jacknife} method.
+%}
+
+%\end{figure}
+%\clearpage
+
+%\begin{figure}
+%\figurenum{7}
+%  \centering
+%  \includegraphics[width=0.6\textwidth]{figure10.eps}
+%\caption{Extreme deconvolution technique applied to the extended sample, at [Fe/H] $<$ -2.0 and %Z$_{max}$ $>$ 5 kpc. Top left: the observed
+%distribution of V$_{\phi}$ (black histogram), while the green (inner halo), and red (outer halo) %curves show the results of the extreme deconvolution analysis. Top right: the observed velocity %distribution function (black), and the inner- and outer halo weighted velocity distribution %function, denoted by the green and the red histogram, respectively. All the distribution are %normalized by taking into account the membership probabilities of each star. Middle left: carbon %distribution function; middle right: membership probability for each star and for the two halo %components, inner (green) and outer (red). Bottom left: weighted carbon distribution function %for the inner- and outer halo, denoted with the green and red histograms, respectively. Bottom %right: the complementary cumulative distribution function of the carbon-to-iron ratio, [C/Fe], %for the inner and outer halo.}
+%\end{figure}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
