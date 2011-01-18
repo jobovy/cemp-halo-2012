@@ -1,6 +1,6 @@
 PRO MEAN_ERRS, njack=njack, datafilename=datafilename
-;IF ~keyword_set(datafilename) THEN datafilename='../data/input_dec_ext_d_jo.txt'
-IF ~keyword_set(datafilename) THEN datafilename='../data/input_dec_ext_d.txt'
+IF ~keyword_set(datafilename) THEN datafilename='../data/input_dec_ext_d_jo.txt'
+;IF ~keyword_set(datafilename) THEN datafilename='../data/input_dec_ext_d.txt'
 ;;Read data
 readcol, datafilename, blah, feh, V, sV, cfe, format='A,D,D,D,D'
 
@@ -14,7 +14,7 @@ xcovar= reform(xcovar,1,1,ngauss)
 
 ndata= n_elements(V)
 ydata= reform(V,1,ndata)
-ycovar= reform(sV^2D0,1,1,ndata)
+ycovar= reform(sV,1,1,ndata)
 projected_gauss_mixtures_c, 2, ydata, ycovar, amp, xmean, xcovar, avgloglikedata=loglike
 
 print, xmean, amp, loglike
